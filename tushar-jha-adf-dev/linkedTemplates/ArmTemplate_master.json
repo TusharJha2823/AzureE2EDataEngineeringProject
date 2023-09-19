@@ -1,0 +1,106 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "tushar-jha-adf-dev"
+		},
+		"AzureSqlDatabase_Source_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureSqlDatabase_Source'",
+			"defaultValue": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=tusharjhaserverdev.database.windows.net;Initial Catalog=tusharjhasqlsource;User ID=tusharjha_admin"
+		},
+		"AzureDataLakeStorage1_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://tusharjhadatalakesource.dfs.core.windows.net/"
+		},
+		"AzureDataLakeStorage1_properties_typeProperties_tenant": {
+			"type": "string",
+			"defaultValue": "9f032373-b529-4aab-8ea6-34eb0e990a87"
+		},
+		"AzureDataLakeStorage1_properties_typeProperties_servicePrincipalId": {
+			"type": "string",
+			"defaultValue": "bf2fd5b2-03c6-4fce-9b1f-fbea40809823"
+		},
+		"AzureDataLakeStorageSink_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://tusharjhadatalakesource.dfs.core.windows.net/"
+		},
+		"AzureDataLakeStorageSink_properties_typeProperties_tenant": {
+			"type": "string",
+			"defaultValue": "9f032373-b529-4aab-8ea6-34eb0e990a87"
+		},
+		"AzureDataLakeStorageSink_properties_typeProperties_servicePrincipalId": {
+			"type": "string",
+			"defaultValue": "bf2fd5b2-03c6-4fce-9b1f-fbea40809823"
+		},
+		"AzureKeyVault1_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "https://tusharjhakeyvault.vault.azure.net/"
+		},
+		"RestServiceAsSource_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://airlabs.co/api/v9/airlines"
+		},
+		"containerUri": {
+			"type": "string",
+			"metadata": "URI to storage account containing linked ARM templates"
+		},
+		"containerSasToken": {
+			"type": "string",
+			"metadata": "Sas token to storage account containing linked ARM templates"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "tushar-jha-adf-dev_ArmTemplate_0",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_0.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"AzureSqlDatabase_Source_connectionString": {
+						"value": "[parameters('AzureSqlDatabase_Source_connectionString')]"
+					},
+					"AzureKeyVault1_properties_typeProperties_baseUrl": {
+						"value": "[parameters('AzureKeyVault1_properties_typeProperties_baseUrl')]"
+					},
+					"RestServiceAsSource_properties_typeProperties_url": {
+						"value": "[parameters('RestServiceAsSource_properties_typeProperties_url')]"
+					},
+					"AzureDataLakeStorage1_properties_typeProperties_url": {
+						"value": "[parameters('AzureDataLakeStorage1_properties_typeProperties_url')]"
+					},
+					"AzureDataLakeStorage1_properties_typeProperties_tenant": {
+						"value": "[parameters('AzureDataLakeStorage1_properties_typeProperties_tenant')]"
+					},
+					"AzureDataLakeStorage1_properties_typeProperties_servicePrincipalId": {
+						"value": "[parameters('AzureDataLakeStorage1_properties_typeProperties_servicePrincipalId')]"
+					},
+					"AzureDataLakeStorageSink_properties_typeProperties_url": {
+						"value": "[parameters('AzureDataLakeStorageSink_properties_typeProperties_url')]"
+					},
+					"AzureDataLakeStorageSink_properties_typeProperties_tenant": {
+						"value": "[parameters('AzureDataLakeStorageSink_properties_typeProperties_tenant')]"
+					},
+					"AzureDataLakeStorageSink_properties_typeProperties_servicePrincipalId": {
+						"value": "[parameters('AzureDataLakeStorageSink_properties_typeProperties_servicePrincipalId')]"
+					}
+				}
+			},
+			"dependsOn": []
+		}
+	]
+}

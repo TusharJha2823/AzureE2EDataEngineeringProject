@@ -1,0 +1,36 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "tushar-jha-adf-dev"
+		},
+		"AzureSqlDatabase_Source_connectionString": {
+			"value": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=tusharjhaserverdev.database.windows.net;Initial Catalog=tusharjhasqlsource;User ID=tusharjha_admin"
+		},
+		"AzureDataLakeStorage1_properties_typeProperties_url": {
+			"value": "https://tusharjhadatalakesource.dfs.core.windows.net/"
+		},
+		"AzureDataLakeStorage1_properties_typeProperties_tenant": {
+			"value": "9f032373-b529-4aab-8ea6-34eb0e990a87"
+		},
+		"AzureDataLakeStorage1_properties_typeProperties_servicePrincipalId": {
+			"value": "bf2fd5b2-03c6-4fce-9b1f-fbea40809823"
+		},
+		"AzureDataLakeStorageSink_properties_typeProperties_url": {
+			"value": "https://tusharjhadatalakesource.dfs.core.windows.net/"
+		},
+		"AzureDataLakeStorageSink_properties_typeProperties_tenant": {
+			"value": "9f032373-b529-4aab-8ea6-34eb0e990a87"
+		},
+		"AzureDataLakeStorageSink_properties_typeProperties_servicePrincipalId": {
+			"value": "bf2fd5b2-03c6-4fce-9b1f-fbea40809823"
+		},
+		"AzureKeyVault1_properties_typeProperties_baseUrl": {
+			"value": "https://tusharjhakeyvault.vault.azure.net/"
+		},
+		"RestServiceAsSource_properties_typeProperties_url": {
+			"value": "https://airlabs.co/api/v9/airlines"
+		}
+	}
+}
