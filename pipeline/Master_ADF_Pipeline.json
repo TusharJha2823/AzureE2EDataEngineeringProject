@@ -129,6 +129,26 @@
 					},
 					"waitOnCompletion": true
 				}
+			},
+			{
+				"name": "Email_Send",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "publish_data_to_sql",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Email_Send",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
 			}
 		],
 		"parameters": {
