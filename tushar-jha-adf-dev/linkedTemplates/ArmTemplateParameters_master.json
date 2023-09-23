@@ -5,6 +5,9 @@
 		"factoryName": {
 			"value": "tushar-jha-adf-dev"
 		},
+		"AzureSqlDatabaseSink_connectionString": {
+			"value": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=tusharjhaserverdev.database.windows.net;Initial Catalog=tusharjha_sql_dev;User ID=tusharjha_admin"
+		},
 		"AzureSqlDatabase_Source_connectionString": {
 			"value": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=tusharjhaserverdev.database.windows.net;Initial Catalog=tusharjhasqlsource;User ID=tusharjha_admin"
 		},
