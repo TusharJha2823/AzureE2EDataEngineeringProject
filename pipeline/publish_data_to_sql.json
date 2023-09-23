@@ -33,7 +33,8 @@
 							"filename": "publish_table.json",
 							"container": "manuallyuploadedfiles"
 						}
-					}
+					},
+					"firstRowOnly": false
 				}
 			},
 			{
