@@ -65,3 +65,28 @@ dbutils.fs.ls('/mnt/raw_datalake/')
 # COMMAND ----------
 
 dbutils.fs.ls('/mnt/cleansed_datalake/')
+
+# COMMAND ----------
+
+# MAGIC %py
+# MAGIC configs = { "fs.azure.account.auth.type": "OAuth",
+# MAGIC             "fs.azure.account.oauth.provider.type": "org.apache.hadoop.fs.azurebfs.oauth2.ClientCredsTokenProvider",
+# MAGIC             "fs.azure.account.oauth2.client.id": dbutils.secrets.get(scope = "tj-DatabricksScope", key = "data-app-id"),
+# MAGIC             "fs.azure.account.oauth2.client.secret": dbutils.secrets.get(scope="tj-DatabricksScope",key="data-app-secret-3"),
+# MAGIC             "fs.azure.account.oauth2.client.endpoint": dbutils.secrets.get(scope = "tj-DatabricksScope", key = "data-client-refresh-url")}
+# MAGIC  
+# MAGIC   #Optionally, you can add <directory-name> to the source URI of your mount point.
+# MAGIC mountPoint="/mnt/datalake_mart/"
+# MAGIC if not any(mount.mountPoint == mountPoint for mount in dbutils.fs.mounts()):
+# MAGIC     dbutils.fs.mount(
+# MAGIC       source = dbutils.secrets.get(scope = "tj-DatabricksScope", key = "datalake-mart"),
+# MAGIC       mount_point = mountPoint,
+# MAGIC       extra_configs = configs)
+
+# COMMAND ----------
+
+dbutils.fs.ls("/mnt/datalake_mart/")
+
+# COMMAND ----------
+
+
