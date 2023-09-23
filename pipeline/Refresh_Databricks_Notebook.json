@@ -1,0 +1,39 @@
+{
+	"name": "Refresh_Databricks_Notebook",
+	"properties": {
+		"activities": [
+			{
+				"name": "Notebook",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Repos/1511046@kiit.ac.in/AzureE2EDataEngineeringProject/ADB/notebooks/TusharjhaDev/Run_Notebooks",
+					"baseParameters": {
+						"Layer_Name": {
+							"value": "@pipeline().parameters.Layer_Name",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "AzureDatabricksNotebookDataset",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"Layer_Name": {
+				"type": "string"
+			}
+		},
+		"annotations": []
+	}
+}
