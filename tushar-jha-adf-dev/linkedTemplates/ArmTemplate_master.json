@@ -17,6 +17,10 @@
 			"metadata": "Secure string for 'connectionString' of 'AzureSqlDatabase_Source'",
 			"defaultValue": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=tusharjhaserverdev.database.windows.net;Initial Catalog=tusharjhasqlsource;User ID=tusharjha_admin"
 		},
+		"AzureBlobStorage_source_properties_typeProperties_connectionString_secretName": {
+			"type": "string",
+			"defaultValue": "blob-connection-string"
+		},
 		"AzureDataLakeStorage1_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://tusharjhadatalakesource.dfs.core.windows.net/"
@@ -41,6 +45,10 @@
 			"type": "string",
 			"defaultValue": "bf2fd5b2-03c6-4fce-9b1f-fbea40809823"
 		},
+		"AzureDatabricksNotebookDataset_properties_typeProperties_existingClusterId": {
+			"type": "string",
+			"defaultValue": "0919-091318-5u4eal40"
+		},
 		"AzureKeyVault1_properties_typeProperties_baseUrl": {
 			"type": "string",
 			"defaultValue": "https://tusharjhakeyvault.vault.azure.net/"
@@ -48,10 +56,6 @@
 		"RestServiceAsSource_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://airlabs.co/api/v9/airlines"
-		},
-		"AzureDatabricksNotebookDataset_properties_typeProperties_existingClusterId": {
-			"type": "string",
-			"defaultValue": "0919-091318-5u4eal40"
 		},
 		"containerUri": {
 			"type": "string",
@@ -91,6 +95,9 @@
 					},
 					"RestServiceAsSource_properties_typeProperties_url": {
 						"value": "[parameters('RestServiceAsSource_properties_typeProperties_url')]"
+					},
+					"AzureBlobStorage_source_properties_typeProperties_connectionString_secretName": {
+						"value": "[parameters('AzureBlobStorage_source_properties_typeProperties_connectionString_secretName')]"
 					},
 					"AzureDataLakeStorage1_properties_typeProperties_url": {
 						"value": "[parameters('AzureDataLakeStorage1_properties_typeProperties_url')]"
