@@ -18,7 +18,8 @@
 						"value": "@json(concat('{\"param\": \"',pipeline().parameters.Status,'\"}'))",
 						"type": "Expression"
 					},
-					"timeout": "00:05:00"
+					"timeout": "00:05:00",
+					"reportStatusOnCallBack": true
 				}
 			}
 		],
