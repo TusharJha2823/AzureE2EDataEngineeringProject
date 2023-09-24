@@ -13,6 +13,133 @@
 	},
 	"resources": [
 		{
+			"name": "[concat(parameters('factoryName'), '/DelimitedText1_Sink')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorageSink",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"container": {
+						"type": "string"
+					},
+					"directory": {
+						"type": "string"
+					},
+					"filename": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": {
+							"value": "@dataset().filename",
+							"type": "Expression"
+						},
+						"folderPath": {
+							"value": "@dataset().directory",
+							"type": "Expression"
+						},
+						"fileSystem": {
+							"value": "@dataset().container",
+							"type": "Expression"
+						}
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DelimitedText1_Source')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureDataLakeStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"container": {
+						"type": "string"
+					},
+					"direcctory": {
+						"type": "string"
+					},
+					"filename": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": {
+							"value": "@dataset().filename",
+							"type": "Expression"
+						},
+						"folderPath": {
+							"value": "@dataset().direcctory",
+							"type": "Expression"
+						},
+						"fileSystem": {
+							"value": "@dataset().container",
+							"type": "Expression"
+						}
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Excel1')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureBlobStorage_source",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Excel",
+				"typeProperties": {
+					"sheetName": "Email_Sheet",
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "Email_Send.xlsx",
+						"container": "source-excel"
+					},
+					"firstRowAsHeader": true
+				},
+				"schema": [
+					{
+						"name": "type",
+						"type": "String"
+					},
+					{
+						"name": "Email_ID",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/Json_Source_info')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -149,7 +276,9 @@
 				},
 				"annotations": []
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/Excel1')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/copy datalake')]",
@@ -397,7 +526,9 @@
 				"lastPublishTime": "2023-09-19T05:35:58Z"
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/Json_Source_info')]"
+				"[concat(variables('factoryId'), '/datasets/Json_Source_info')]",
+				"[concat(variables('factoryId'), '/datasets/DelimitedText1_Source')]",
+				"[concat(variables('factoryId'), '/datasets/DelimitedText1_Sink')]"
 			]
 		},
 		{
@@ -694,7 +825,7 @@
 						"type": "ForEach",
 						"dependsOn": [
 							{
-								"activity": "Lookup_publish",
+								"activity": "Wait1",
 								"dependencyConditions": [
 									"Succeeded"
 								]
@@ -727,9 +858,9 @@
 											}
 										},
 										"sink": {
-											"type": "AzureSqlSink",
-											"writeBehavior": "insert",
-											"sqlWriterUseTableLock": false,
+											"type": "SqlDWSink",
+											"allowCopyCommand": true,
+											"copyCommandSettings": {},
 											"tableOption": "autoCreate",
 											"disableMetricsCollection": false
 										},
@@ -756,7 +887,7 @@
 									],
 									"outputs": [
 										{
-											"referenceName": "AzureSqlTableSink",
+											"referenceName": "AzureSynapseAnalyticsTable_sink",
 											"type": "DatasetReference",
 											"parameters": {
 												"table_name": {
@@ -768,6 +899,68 @@
 									]
 								}
 							]
+						}
+					},
+					{
+						"name": "Wait1",
+						"type": "Wait",
+						"dependsOn": [
+							{
+								"activity": "DW_Status_Job",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"waitTimeInSeconds": 3
+						}
+					},
+					{
+						"name": "DW_Status_Job",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "Lookup_publish",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "DW_Status_Job",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"Status": "Start"
+							}
+						}
+					},
+					{
+						"name": "DW_Status_Job1",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "ForEachdata",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "DW_Status_Job",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"Status": "Stop"
+							}
 						}
 					}
 				],
@@ -952,7 +1145,8 @@
 						"defaultValue": [
 							"Cleansed",
 							"Data_Quality_Cleansed",
-							"Mart"
+							"Mart",
+							"Data_Quality_Mart"
 						]
 					}
 				},

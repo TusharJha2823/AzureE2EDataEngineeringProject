@@ -11,6 +11,9 @@
 		"AzureSqlDatabase_Source_connectionString": {
 			"value": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=tusharjhaserverdev.database.windows.net;Initial Catalog=tusharjhasqlsource;User ID=tusharjha_admin"
 		},
+		"AzureSynapseAnalytics_sink_connectionString": {
+			"value": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=tusharjhaserverdev.database.windows.net;Initial Catalog=tusharjha_SQL_DW_pool;User ID=tusharjha_admin"
+		},
 		"AzureBlobStorage_source_properties_typeProperties_connectionString_secretName": {
 			"value": "blob-connection-string"
 		},

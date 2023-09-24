@@ -17,6 +17,11 @@
 			"metadata": "Secure string for 'connectionString' of 'AzureSqlDatabase_Source'",
 			"defaultValue": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=tusharjhaserverdev.database.windows.net;Initial Catalog=tusharjhasqlsource;User ID=tusharjha_admin"
 		},
+		"AzureSynapseAnalytics_sink_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureSynapseAnalytics_sink'",
+			"defaultValue": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=tusharjhaserverdev.database.windows.net;Initial Catalog=tusharjha_SQL_DW_pool;User ID=tusharjha_admin"
+		},
 		"AzureBlobStorage_source_properties_typeProperties_connectionString_secretName": {
 			"type": "string",
 			"defaultValue": "blob-connection-string"
@@ -89,6 +94,9 @@
 					},
 					"AzureSqlDatabase_Source_connectionString": {
 						"value": "[parameters('AzureSqlDatabase_Source_connectionString')]"
+					},
+					"AzureSynapseAnalytics_sink_connectionString": {
+						"value": "[parameters('AzureSynapseAnalytics_sink_connectionString')]"
 					},
 					"AzureKeyVault1_properties_typeProperties_baseUrl": {
 						"value": "[parameters('AzureKeyVault1_properties_typeProperties_baseUrl')]"

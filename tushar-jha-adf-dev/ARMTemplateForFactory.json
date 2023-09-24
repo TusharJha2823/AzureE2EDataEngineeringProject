@@ -17,6 +17,11 @@
 			"metadata": "Secure string for 'connectionString' of 'AzureSqlDatabase_Source'",
 			"defaultValue": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=tusharjhaserverdev.database.windows.net;Initial Catalog=tusharjhasqlsource;User ID=tusharjha_admin"
 		},
+		"AzureSynapseAnalytics_sink_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureSynapseAnalytics_sink'",
+			"defaultValue": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=tusharjhaserverdev.database.windows.net;Initial Catalog=tusharjha_SQL_DW_pool;User ID=tusharjha_admin"
+		},
 		"AzureBlobStorage_source_properties_typeProperties_connectionString_secretName": {
 			"type": "string",
 			"defaultValue": "blob-connection-string"
@@ -62,6 +67,47 @@
 		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
 	},
 	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/DW_Status_Job')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "WebHook1",
+						"type": "WebHook",
+						"dependsOn": [],
+						"policy": {
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://86f3c6c3-c8c1-4b4e-a444-1fda2ef24541.webhook.eus.azure-automation.net/webhooks?token=Ths2psvfEOXZlNftV4LyhZKKtU9DoJ7br63SS7%2fpLl0%3d",
+							"method": "POST",
+							"headers": {},
+							"body": {
+								"value": "@json(concat('{\"param\": \"',pipeline().parameters.Status,'\"}'))",
+								"type": "Expression"
+							},
+							"timeout": "00:05:00",
+							"reportStatusOnCallBack": true
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"Status": {
+						"type": "string"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
 		{
 			"name": "[concat(parameters('factoryName'), '/Email_Send')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
@@ -353,7 +399,8 @@
 						"defaultValue": [
 							"Cleansed",
 							"Data_Quality_Cleansed",
-							"Mart"
+							"Mart",
+							"Data_Quality_Mart"
 						]
 					}
 				},
@@ -965,7 +1012,7 @@
 						"type": "ForEach",
 						"dependsOn": [
 							{
-								"activity": "Lookup_publish",
+								"activity": "Wait1",
 								"dependencyConditions": [
 									"Succeeded"
 								]
@@ -998,9 +1045,9 @@
 											}
 										},
 										"sink": {
-											"type": "AzureSqlSink",
-											"writeBehavior": "insert",
-											"sqlWriterUseTableLock": false,
+											"type": "SqlDWSink",
+											"allowCopyCommand": true,
+											"copyCommandSettings": {},
 											"tableOption": "autoCreate",
 											"disableMetricsCollection": false
 										},
@@ -1027,7 +1074,7 @@
 									],
 									"outputs": [
 										{
-											"referenceName": "AzureSqlTableSink",
+											"referenceName": "AzureSynapseAnalyticsTable_sink",
 											"type": "DatasetReference",
 											"parameters": {
 												"table_name": {
@@ -1040,6 +1087,68 @@
 								}
 							]
 						}
+					},
+					{
+						"name": "Wait1",
+						"type": "Wait",
+						"dependsOn": [
+							{
+								"activity": "DW_Status_Job",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"waitTimeInSeconds": 3
+						}
+					},
+					{
+						"name": "DW_Status_Job",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "Lookup_publish",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "DW_Status_Job",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"Status": "Start"
+							}
+						}
+					},
+					{
+						"name": "DW_Status_Job1",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "ForEachdata",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "DW_Status_Job",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"Status": "Stop"
+							}
+						}
 					}
 				],
 				"policy": {
@@ -1050,8 +1159,9 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/Json_Source_info')]",
+				"[concat(variables('factoryId'), '/pipelines/DW_Status_Job')]",
 				"[concat(variables('factoryId'), '/datasets/AzureDatabricksDeltaLakeDataset_source')]",
-				"[concat(variables('factoryId'), '/datasets/AzureSqlTableSink')]",
+				"[concat(variables('factoryId'), '/datasets/AzureSynapseAnalyticsTable_sink')]",
 				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorageSink')]"
 			]
 		},
@@ -1140,6 +1250,35 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDatabase_Source')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureSynapseAnalyticsTable_sink')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSynapseAnalytics_sink",
+					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"table_name": {
+						"type": "string"
+					}
+				},
+				"annotations": [],
+				"type": "AzureSqlDWTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": {
+						"value": "@dataset().table_name",
+						"type": "Expression"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureSynapseAnalytics_sink')]"
 			]
 		},
 		{
@@ -1632,6 +1771,29 @@
 							"type": "LinkedServiceReference"
 						},
 						"secretName": "database-source-password"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureKeyVault1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureSynapseAnalytics_sink')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDW",
+				"typeProperties": {
+					"connectionString": "[parameters('AzureSynapseAnalytics_sink_connectionString')]",
+					"password": {
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "AzureKeyVault1",
+							"type": "LinkedServiceReference"
+						},
+						"secretName": "database-sql-sink"
 					}
 				}
 			},
