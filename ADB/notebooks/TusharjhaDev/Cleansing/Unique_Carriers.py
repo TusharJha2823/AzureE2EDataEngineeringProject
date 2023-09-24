@@ -12,10 +12,6 @@ df = (
 
 # COMMAND ----------
 
-df.display()
-
-# COMMAND ----------
-
 df_base = df.selectExpr(
     "Code as code",
     "Description as description",
@@ -37,7 +33,3 @@ f_delta_cleansed_load('unique_carriers','/mnt/cleansed_datalake/Unique_Carriers'
 
 # MAGIC %sql
 # MAGIC select * from cleansed_TJdatabase.unique_carriers
-
-# COMMAND ----------
-
-

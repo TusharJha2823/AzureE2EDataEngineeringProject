@@ -5,10 +5,6 @@
 
 -- COMMAND ----------
 
-DESC cleansed_tjdatabase.unique_carriers
-
--- COMMAND ----------
-
 CREATE TABLE IF NOT EXISTS DIM_UNIQUE_CARRIERS (
     code STRING,
   description STRING
@@ -29,7 +25,7 @@ desc DIM_UNIQUE_CARRIERS
 
 -- COMMAND ----------
 
-SELECT * FROM DIM_UNIQUE_CARRIERS
+SELECT * FROM mart_TJdatabase.DIM_UNIQUE_CARRIERS
 
 -- COMMAND ----------
 

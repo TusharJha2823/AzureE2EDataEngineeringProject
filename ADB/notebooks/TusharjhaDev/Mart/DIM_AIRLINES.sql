@@ -5,19 +5,11 @@
 
 -- COMMAND ----------
 
-DESC mart_TJdatabase.dim_airlines
-
--- COMMAND ----------
-
 CREATE TABLE IF NOT EXISTS DIM_AIRLINES (
   iata_code STRING,
   icao_code STRING,
   name STRING
 ) USING DELTA LOCATION '/mnt/datalake_mart/DIM_AIRLINES'
-
--- COMMAND ----------
-
-desc DIM_AIRLINES
 
 -- COMMAND ----------
 
@@ -31,7 +23,7 @@ desc DIM_AIRLINES
 
 -- COMMAND ----------
 
-SELECT * FROM DIM_AIRLINES
+SELECT * FROM mart_TJdatabase.DIM_AIRLINES
 
 -- COMMAND ----------
 

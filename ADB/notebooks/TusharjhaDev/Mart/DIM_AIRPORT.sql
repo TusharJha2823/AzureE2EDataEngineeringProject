@@ -5,20 +5,12 @@
 
 -- COMMAND ----------
 
-DESC cleansed_tjdatabase.airport
-
--- COMMAND ----------
-
 CREATE TABLE IF NOT EXISTS DIM_AIRPORT (
   code STRING,
   city STRING,
   country STRING,
   airport STRING
 ) USING DELTA LOCATION '/mnt/datalake_mart/DIM_AIRPORT'
-
--- COMMAND ----------
-
-desc DIM_AIRPORT
 
 -- COMMAND ----------
 
@@ -34,7 +26,3 @@ desc DIM_AIRPORT
 -- COMMAND ----------
 
 SELECT * FROM DIM_AIRPORT
-
--- COMMAND ----------
-
-

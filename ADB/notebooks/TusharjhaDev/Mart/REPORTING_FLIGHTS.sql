@@ -1,7 +1,6 @@
 -- Databricks notebook source
 -- MAGIC %sql
 -- MAGIC use mart_TJdatabase;
--- MAGIC
 
 -- COMMAND ----------
 
@@ -58,7 +57,7 @@ desc REPORTING_FLIGHTS
 
 -- COMMAND ----------
 
-select * from REPORTING_FLIGHTS
+select * from mart_TJdatabase.REPORTING_FLIGHTS
 
 -- COMMAND ----------
 

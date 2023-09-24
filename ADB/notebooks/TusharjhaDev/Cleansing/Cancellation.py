@@ -12,10 +12,6 @@ df = (
 
 # COMMAND ----------
 
-df.display()
-
-# COMMAND ----------
-
 df_base = df.selectExpr(
     "Code as code",
     "Description as description",
@@ -36,7 +32,3 @@ f_delta_cleansed_load('cancellation','/mnt/cleansed_datalake/Cancellation','clea
 
 # MAGIC %sql
 # MAGIC select * from cleansed_TJdatabase.cancellation
-
-# COMMAND ----------
-
-

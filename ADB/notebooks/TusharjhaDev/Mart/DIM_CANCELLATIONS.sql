@@ -5,20 +5,6 @@
 
 -- COMMAND ----------
 
-DESC cleansed_tjdatabase.cancellation
-
--- COMMAND ----------
-
-drop table DIM_CANCELLATIONS
-
-
--- COMMAND ----------
-
--- MAGIC %py
--- MAGIC dbutils.fs.rm("/mnt/datalake_mart/DIM_CANCELLATIONS", recurse=True)
-
--- COMMAND ----------
-
 CREATE TABLE IF NOT EXISTS DIM_CANCELLATIONS (
 code STRING,
   description STRING

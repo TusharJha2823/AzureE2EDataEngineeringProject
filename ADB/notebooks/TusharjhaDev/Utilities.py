@@ -7,7 +7,6 @@
 # MAGIC                  test_cases string,
 # MAGIC                  test_query string,
 # MAGIC                  expected_result int
-# MAGIC
 # MAGIC         )""")
 # MAGIC         spark.sql(f"""insert into {database}.insert_test_cases(id,test_cases,test_query,expected_result) values({insert_id},'{insert_test_cases}','{insert_test_query}',{insert_expected_result})""")
 # MAGIC     except Exception as err:
@@ -23,7 +22,7 @@
 # MAGIC         if(len(orginal_result)==i.expected_result):
 # MAGIC             print("Test case is passed")
 # MAGIC         else:
-# MAGIC             raise Exception (f"{test_cases} is failed, Kindly check")
+# MAGIC             raise Exception (f"""{test_cases} is failed, Kindly check""")
 # MAGIC
 
 # COMMAND ----------
@@ -77,7 +76,3 @@
 # MAGIC         else:
 # MAGIC             pass
 # MAGIC
-
-# COMMAND ----------
-
-

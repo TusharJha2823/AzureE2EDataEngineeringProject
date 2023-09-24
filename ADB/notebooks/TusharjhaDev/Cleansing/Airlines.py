@@ -37,7 +37,3 @@ f_delta_cleansed_load('airline','/mnt/cleansed_datalake/airline','cleansed_TJdat
 
 # MAGIC %sql
 # MAGIC select * from cleansed_TJdatabase.airline
-
-# COMMAND ----------
-
-

@@ -5,10 +5,6 @@
 
 -- COMMAND ----------
 
-DESC cleansed_tjdatabase.plane
-
--- COMMAND ----------
-
 CREATE TABLE IF NOT EXISTS DIM_PLANE (
   tailid STRING,
   type STRING,
@@ -43,7 +39,7 @@ desc DIM_PLANE
 
 -- COMMAND ----------
 
-SELECT * FROM DIM_PLANE
+SELECT * FROM mart_TJdatabase.DIM_PLANE
 
 -- COMMAND ----------
 

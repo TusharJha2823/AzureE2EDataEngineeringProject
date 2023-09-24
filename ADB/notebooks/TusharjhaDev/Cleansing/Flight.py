@@ -12,14 +12,6 @@ df1 = (
 
 # COMMAND ----------
 
-df1.display()
-
-# COMMAND ----------
-
-df1.dtypes
-
-# COMMAND ----------
-
 spark.conf.set("spark.sql.legacy.timeParserPolicy","LEGACY")
 
 # COMMAND ----------
@@ -64,18 +56,9 @@ df_bro.writeStream.trigger(once=True).format("delta").option(
 
 # COMMAND ----------
 
-dbutils.fs.rm("/dbfs/FileStore/tables/checkpointLocation/flights1",  recurse=True)
-display(dbutils.fs.ls("/dbfs/FileStore/tables/checkpointLocation/"))
-
-# COMMAND ----------
-
 f_delta_cleansed_load('flights','/mnt/cleansed_datalake/flights','cleansed_TJdatabase')
 
 # COMMAND ----------
 
 # MAGIC %sql
 # MAGIC select * from cleansed_TJdatabase.flights
-
-# COMMAND ----------
-
-

@@ -7,21 +7,12 @@ spark.conf.set("spark.sql.legacy.timeParserPolicy","LEGACY")
 
 # COMMAND ----------
 
-#dbutils.fs.rm("/dbfs/FileStore/tables/checkpointLocation/PLANE",  recurse=True)
-display(dbutils.fs.ls("/dbfs/FileStore/tables/checkpointLocation/"))
-
-# COMMAND ----------
-
 df = (
     spark.readStream.format("cloudFiles")
     .option("cloudFiles.format", "csv")
     .option("cloudFiles.schemaLocation", "/dbfs/FileStore/tables/schema/Planes1")
-    .load("/mnt/raw_datalake/Plane/")
+    .load("/mnt/raw_datalake/PLANE/")
 )
-
-# COMMAND ----------
-
-df.display()
 
 # COMMAND ----------
 
@@ -49,13 +40,3 @@ f_delta_cleansed_load('plane','/mnt/cleansed_datalake/plane','cleansed_TJdatabas
 
 # MAGIC %sql
 # MAGIC select * from cleansed_TJdatabase.plane
-
-# COMMAND ----------
-
-# MAGIC %sql
-# MAGIC update cleansed_TJdatabase.plane 
-# MAGIC set Date_Part = "2023-09-23"
-
-# COMMAND ----------
-
-
