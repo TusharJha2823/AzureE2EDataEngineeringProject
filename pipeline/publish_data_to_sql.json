@@ -42,7 +42,7 @@
 				"type": "ForEach",
 				"dependsOn": [
 					{
-						"activity": "Lookup_publish",
+						"activity": "WebHook1",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -115,6 +115,28 @@
 							]
 						}
 					]
+				}
+			},
+			{
+				"name": "WebHook1",
+				"type": "WebHook",
+				"dependsOn": [
+					{
+						"activity": "Lookup_publish",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://86f3c6c3-c8c1-4b4e-a444-1fda2ef24541.webhook.eus.azure-automation.net/webhooks?token=vUWKooBWndkMCiQqfA9Fcn2COcGAMSmab3bdtDfLQ5E%3d",
+					"method": "POST",
+					"timeout": "00:10:00"
 				}
 			}
 		],
