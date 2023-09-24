@@ -157,7 +157,8 @@
 				"defaultValue": [
 					"Cleansed",
 					"Data_Quality_Cleansed",
-					"Mart"
+					"Mart",
+					"Data_Quality_Mart"
 				]
 			}
 		},
