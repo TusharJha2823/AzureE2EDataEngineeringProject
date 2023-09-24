@@ -85,8 +85,37 @@
 			"properties": {
 				"activities": [
 					{
-						"name": "Copy data1",
-						"type": "Copy",
+						"name": "Web1",
+						"type": "WebActivity",
+						"dependsOn": [
+							{
+								"activity": "Lookupforemail",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"url": "https://prod-19.eastus.logic.azure.com:443/workflows/b566a4d51bc14cf197d5af5ca02ee618/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=D_uN4r2HZHF5ts1zKWzfYRxDvq6tU91-xpvZXnviE1k",
+							"method": "POST",
+							"headers": {},
+							"body": {
+								"value": "@activity('Lookupforemail').output.value",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "Lookupforemail",
+						"type": "Lookup",
 						"dependsOn": [],
 						"policy": {
 							"timeout": "0.12:00:00",
@@ -105,67 +134,12 @@
 									"enablePartitionDiscovery": false
 								}
 							},
-							"sink": {
-								"type": "AzureSqlSink",
-								"preCopyScript": "Drop table if exists dbo.Email_Send;",
-								"writeBehavior": "insert",
-								"sqlWriterUseTableLock": false,
-								"tableOption": "autoCreate",
-								"disableMetricsCollection": false
-							},
-							"enableStaging": false,
-							"translator": {
-								"type": "TabularTranslator",
-								"typeConversion": true,
-								"typeConversionSettings": {
-									"allowDataTruncation": true,
-									"treatBooleanAsNumber": false
-								}
-							}
-						},
-						"inputs": [
-							{
+							"dataset": {
 								"referenceName": "Excel1",
 								"type": "DatasetReference",
 								"parameters": {}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "AzureSqlTableSink",
-								"type": "DatasetReference",
-								"parameters": {
-									"table_name": "Email_Send"
-								}
-							}
-						]
-					},
-					{
-						"name": "Web1",
-						"type": "WebActivity",
-						"dependsOn": [
-							{
-								"activity": "Copy data1",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"url": "https://prod-19.eastus.logic.azure.com:443/workflows/b566a4d51bc14cf197d5af5ca02ee618/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=D_uN4r2HZHF5ts1zKWzfYRxDvq6tU91-xpvZXnviE1k",
-							"method": "POST",
-							"headers": {},
-							"body": [
-								{}
-							]
+							},
+							"firstRowOnly": false
 						}
 					}
 				],
