@@ -1,0 +1,28 @@
+{
+	"name": "DW_Status_Job",
+	"properties": {
+		"activities": [
+			{
+				"name": "WebHook1",
+				"type": "WebHook",
+				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://86f3c6c3-c8c1-4b4e-a444-1fda2ef24541.webhook.eus.azure-automation.net/webhooks?token=vUWKooBWndkMCiQqfA9Fcn2COcGAMSmab3bdtDfLQ5E%3d",
+					"method": "POST",
+					"timeout": "00:05:00"
+				}
+			}
+		],
+		"parameters": {
+			"Status": {
+				"type": "string"
+			}
+		},
+		"annotations": []
+	}
+}

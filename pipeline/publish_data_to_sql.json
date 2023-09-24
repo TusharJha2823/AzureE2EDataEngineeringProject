@@ -118,33 +118,11 @@
 				}
 			},
 			{
-				"name": "WebHook1",
-				"type": "WebHook",
-				"dependsOn": [
-					{
-						"activity": "Lookup_publish",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"policy": {
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"url": "https://86f3c6c3-c8c1-4b4e-a444-1fda2ef24541.webhook.eus.azure-automation.net/webhooks?token=vUWKooBWndkMCiQqfA9Fcn2COcGAMSmab3bdtDfLQ5E%3d",
-					"method": "POST",
-					"timeout": "00:05:00"
-				}
-			},
-			{
 				"name": "Wait1",
 				"type": "Wait",
 				"dependsOn": [
 					{
-						"activity": "WebHook1",
+						"activity": "DW_Status_Job",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -156,8 +134,28 @@
 				}
 			},
 			{
-				"name": "WebHook1_copy1",
-				"type": "WebHook",
+				"name": "DW_Status_Job",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Lookup_publish",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "DW_Status_Job",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "DW_Status_Job1",
+				"type": "ExecutePipeline",
 				"dependsOn": [
 					{
 						"activity": "ForEachdata",
@@ -166,15 +164,13 @@
 						]
 					}
 				],
-				"policy": {
-					"secureOutput": false,
-					"secureInput": false
-				},
 				"userProperties": [],
 				"typeProperties": {
-					"url": "https://86f3c6c3-c8c1-4b4e-a444-1fda2ef24541.webhook.eus.azure-automation.net/webhooks?token=vUWKooBWndkMCiQqfA9Fcn2COcGAMSmab3bdtDfLQ5E%3d",
-					"method": "POST",
-					"timeout": "00:05:00"
+					"pipeline": {
+						"referenceName": "DW_Status_Job",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
 				}
 			}
 		],
