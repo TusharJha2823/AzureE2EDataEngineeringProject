@@ -180,11 +180,6 @@
 				}
 			}
 		],
-		"parameters": {
-			"DW_Status": {
-				"type": "string"
-			}
-		},
 		"annotations": []
 	}
 }
