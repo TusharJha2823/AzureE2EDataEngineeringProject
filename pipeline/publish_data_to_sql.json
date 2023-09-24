@@ -150,7 +150,10 @@
 						"referenceName": "DW_Status_Job",
 						"type": "PipelineReference"
 					},
-					"waitOnCompletion": true
+					"waitOnCompletion": true,
+					"parameters": {
+						"Status": "Start"
+					}
 				}
 			},
 			{
@@ -170,7 +173,10 @@
 						"referenceName": "DW_Status_Job",
 						"type": "PipelineReference"
 					},
-					"waitOnCompletion": true
+					"waitOnCompletion": true,
+					"parameters": {
+						"Status": "Stop"
+					}
 				}
 			}
 		],
