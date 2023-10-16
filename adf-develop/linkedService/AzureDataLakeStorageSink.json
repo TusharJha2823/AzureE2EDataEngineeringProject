@@ -1,0 +1,22 @@
+{
+	"name": "AzureDataLakeStorageSink",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "AzureBlobFS",
+		"typeProperties": {
+			"url": "https://tusharjhadatalakesource.dfs.core.windows.net/",
+			"tenant": "9f032373-b529-4aab-8ea6-34eb0e990a87",
+			"servicePrincipalId": "bf2fd5b2-03c6-4fce-9b1f-fbea40809823",
+			"servicePrincipalCredentialType": "ServicePrincipalKey",
+			"servicePrincipalCredential": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "AzureKeyVault1",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "data-app-secret-3"
+			}
+		}
+	}
+}

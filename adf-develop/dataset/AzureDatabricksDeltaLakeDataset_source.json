@@ -1,0 +1,24 @@
+{
+	"name": "AzureDatabricksDeltaLakeDataset_source",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDatabricksDeltaLake1",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"table_name": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "AzureDatabricksDeltaLakeDataset",
+		"typeProperties": {
+			"database": "mart_tjdatabase",
+			"table": {
+				"value": "@dataset().table_name",
+				"type": "Expression"
+			}
+		},
+		"schema": []
+	}
+}

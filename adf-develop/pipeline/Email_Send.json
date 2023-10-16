@@ -1,0 +1,64 @@
+{
+	"name": "Email_Send",
+	"properties": {
+		"activities": [
+			{
+				"name": "Web1",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "Lookupforemail",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://prod-19.eastus.logic.azure.com:443/workflows/b566a4d51bc14cf197d5af5ca02ee618/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=D_uN4r2HZHF5ts1zKWzfYRxDvq6tU91-xpvZXnviE1k",
+					"method": "POST",
+					"body": {
+						"value": "@activity('Lookupforemail').output.value",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Lookupforemail",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "ExcelSource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						}
+					},
+					"dataset": {
+						"referenceName": "Excel1",
+						"type": "DatasetReference"
+					},
+					"firstRowOnly": false
+				}
+			}
+		],
+		"annotations": []
+	}
+}

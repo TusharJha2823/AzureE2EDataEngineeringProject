@@ -1,0 +1,34 @@
+{
+	"name": "Json_Source_info",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorageSink",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"filename": {
+				"type": "string"
+			},
+			"container": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": {
+					"value": "@dataset().filename",
+					"type": "Expression"
+				},
+				"fileSystem": {
+					"value": "@dataset().container",
+					"type": "Expression"
+				}
+			}
+		},
+		"schema": {}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

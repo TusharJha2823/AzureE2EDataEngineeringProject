@@ -1,0 +1,19 @@
+{
+	"name": "AzureDatabricksNotebookDataset",
+	"properties": {
+		"annotations": [],
+		"type": "AzureDatabricks",
+		"typeProperties": {
+			"domain": "https://adb-5549240048360071.11.azuredatabricks.net/",
+			"accessToken": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "AzureKeyVault1",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "databricks-token-connection"
+			},
+			"existingClusterId": "0919-091318-5u4eal40"
+		}
+	}
+}

@@ -1,0 +1,167 @@
+{
+	"name": "Master_ADF_Pipeline",
+	"properties": {
+		"activities": [
+			{
+				"name": "copy datalake",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "copy datalake",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "copy_sql_tables",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "copy_sql_tables",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "copy rest api",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "copy rest api",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "Refresh_Databricks_Notebook",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Refresh_Databricks_Notebook",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"Layer_Name": "Raw"
+					}
+				}
+			},
+			{
+				"name": "ForEach1",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "copy datalake",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "copy_sql_tables",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "copy rest api",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "Refresh_Databricks_Notebook",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@pipeline().parameters.layer_names_to_run",
+						"type": "Expression"
+					},
+					"isSequential": true,
+					"activities": [
+						{
+							"name": "Refresh_Databricks_Notebook_1",
+							"type": "ExecutePipeline",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"pipeline": {
+									"referenceName": "Refresh_Databricks_Notebook",
+									"type": "PipelineReference"
+								},
+								"waitOnCompletion": true
+							}
+						}
+					]
+				}
+			},
+			{
+				"name": "publish_data_to_sql",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "ForEach1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "publish_data_to_sql",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			},
+			{
+				"name": "Email_Send",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "publish_data_to_sql",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "Email_Send",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			}
+		],
+		"parameters": {
+			"layer_names_to_run": {
+				"type": "array",
+				"defaultValue": [
+					"Cleansed",
+					"Data_Quality_Cleansed",
+					"Mart",
+					"Data_Quality_Mart"
+				]
+			}
+		},
+		"annotations": []
+	}
+}

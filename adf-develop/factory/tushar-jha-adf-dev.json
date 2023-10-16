@@ -1,0 +1,9 @@
+{
+	"name": "tushar-jha-adf-dev",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "936f87d9-06f9-4277-a2d4-e420165b2d06",
+		"tenantId": "9f032373-b529-4aab-8ea6-34eb0e990a87"
+	}
+}
